@@ -15,20 +15,22 @@ public class TCall implements Runnable{
 	
 	@Override
 	public void run() {
-		System.out.println("llamada en proceso " + call.getId() + " atendida por: " + call.getEmployee().getName());
-		int cont = 0;
-		while(time <= cont) {
-			try {
-				this.wait(1000);
-				cont+= 1000;
-				System.out.println("llamada " + call.getId() + " atendida por: " + call.getEmployee().getName() + " esta en proceso");
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		synchronized (this) {
+			System.out.println("llamada en proceso " + call.getId() + " atendida por: " + call.getEmployee().getName() + " tiempo: " + this.time/1000);
+			int cont = 0;
+			while(cont <= time) {
+				try {
+					this.wait(1000);
+					cont+= 1000;
+					System.out.println("llamada " + call.getId() + " atendida por: " + call.getEmployee().getName() + " esta en proceso");
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
-			
+			System.out.println("llamada " + call.getId() + " atendida por: " + call.getEmployee().getName() + " fue terminada");
 		}
-		System.out.println("llamada " + call.getId() + " atendida por: " + call.getEmployee().getName() + " fue terminada");
 		
 	}
 
