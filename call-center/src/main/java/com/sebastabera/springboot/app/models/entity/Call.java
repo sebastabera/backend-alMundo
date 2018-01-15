@@ -25,7 +25,6 @@ public class Call implements Serializable{
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Employee employee;
 	
-	@NotEmpty
 	private boolean state;
 	
 	public Call(Employee employee, boolean state) {
@@ -34,7 +33,7 @@ public class Call implements Serializable{
 	}
 	
 	public Call() {
-		
+	
 	}
 
 	public Long getId() {

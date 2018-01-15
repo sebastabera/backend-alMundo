@@ -1,5 +1,6 @@
 package com.sebastabera.springboot.app.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,8 @@ import com.sebastabera.springboot.app.dao.IEmployeeDaoRepository;
 import com.sebastabera.springboot.app.models.entity.Call;
 import com.sebastabera.springboot.app.models.entity.Employee;
 
-public class Dispatcher implements Runnable{
+@Service
+public class Dispatcher {
 
 	@Autowired
 	private IEmployeeDaoRepository employeeDaoRepository;
@@ -18,18 +20,34 @@ public class Dispatcher implements Runnable{
 	@Autowired 
 	private ICallDaoRepository callDaoRepository;
 	
+	private List<Call> calls;
+	
 	private Call call;
 	
-	@Override
-	public void run() {
+	public Dispatcher() {
+		calls = new ArrayList<Call>();
+	}
+	
+	public void createCall() {
+		if(attendCall()) {
+			int numero = (int) (Math.random() * 5) + 5;
+			TCall newCall = new TCall(call);
+			Thread llamada1 = new Thread(newCall);			
+			llamada1.start();
+		}
+	}
+	public boolean attendCall() {
 		if(verifyMaxNumberCalls()) {
 			if(dispatcherCall()) {
 				System.out.println(call);
+				return true;
 			} else {
 				System.out.println("No hay empleados disponibles para atender la llamada");
+				return false;
 			}
 		} else {
 			System.out.println("Hay mas de 10 llamadas en curso");
+			return false;
 		}
 	}
 	
@@ -46,15 +64,21 @@ public class Dispatcher implements Runnable{
 	
 	
 	public boolean verifyMaxNumberCalls() {
-		List<Call> calls = (List<Call>) callDaoRepository.findByStateCalls();
-		return (calls.size() <=10) ? true : false;
+		List<Call> calls = (List<Call>) callDaoRepository.findAll();
+		return (calls != null && calls.size() <=10) ? true : false;
+	}
+	
+	public void stopCall(Long id) {
+		Call callAux = callDaoRepository.findOne(id);
+		callAux.setState(false);
+		callDaoRepository.save(callAux);
 	}
 	
 	public Employee employeeToCall() {		
-		Employee operador = employeeDaoRepository.findByPosition("operador");
-		Employee supervisor = employeeDaoRepository.findByPosition("supervisor");
-		Employee director = employeeDaoRepository.findByPosition("director");
-		return (operador != null) ? operador : (supervisor != null) ? supervisor : (director != null) ? director : null;
+		List<Employee> operador = employeeDaoRepository.findByPosition("operador");
+		List<Employee> supervisor = employeeDaoRepository.findByPosition("supervisor");
+		List<Employee> director = employeeDaoRepository.findByPosition("director");
+		return (operador.size() != 0) ? operador.get(0) : (supervisor.size() != 0) ? supervisor.get(0) : (director.size() != 0) ? director.get(0) : null;
 	}
 	
 }
