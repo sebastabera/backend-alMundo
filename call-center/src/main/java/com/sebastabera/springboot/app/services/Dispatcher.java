@@ -31,7 +31,7 @@ public class Dispatcher {
 	public void createCall() {
 		if(attendCall()) {
 			int numero = (int) (Math.random() * 5) + 5;
-			TCall newCall = new TCall(call);
+			TCall newCall = new TCall(call, numero);
 			Thread llamada1 = new Thread(newCall);			
 			llamada1.start();
 		}
