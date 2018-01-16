@@ -2,14 +2,17 @@ package com.sebastabera.springboot.app.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sebastabera.springboot.app.dao.ICallDaoRepository;
 import com.sebastabera.springboot.app.dao.IEmployeeDaoRepository;
+import com.sebastabera.springboot.app.dao.IPositionDaoRepository;
 import com.sebastabera.springboot.app.models.entity.Call;
 import com.sebastabera.springboot.app.models.entity.Employee;
+import com.sebastabera.springboot.app.models.entity.Position;
 
 @Service
 public class Dispatcher {
@@ -28,12 +31,14 @@ public class Dispatcher {
 		calls = new ArrayList<Call>();
 	}
 	
-	public void createCall() {
+	public void createCall(CountDownLatch cdl) throws InterruptedException {
 		if(attendCall()) {
 			int numero = (int) (Math.random() * 5) + 5;
-			TCall newCall = new TCall(call, numero);
-			Thread llamada1 = new Thread(newCall);			
-			llamada1.start();
+			TCall newCall = new TCall(call, numero, cdl);
+			Thread llamada = new Thread(newCall);			
+			llamada.start();
+		} else {
+			
 		}
 	}
 	public boolean attendCall() {
@@ -80,5 +85,7 @@ public class Dispatcher {
 		List<Employee> director = employeeDaoRepository.findByPosition("director");
 		return (operador.size() != 0) ? operador.get(0) : (supervisor.size() != 0) ? supervisor.get(0) : (director.size() != 0) ? director.get(0) : null;
 	}
+	
+	
 	
 }
