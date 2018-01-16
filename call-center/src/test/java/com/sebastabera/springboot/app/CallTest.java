@@ -88,7 +88,7 @@ public class CallTest {
 
 			cdl.await();
 			
-			Assert.assertEquals(dispatcher.getNumValidCalls(), 7);
+			Assert.assertEquals(dispatcher.getNumValidCalls(), 6);
 			//Assert.assertEquals(dispatcher.getNumInvalidCalls(), 4);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
