@@ -27,8 +27,14 @@ public class Dispatcher {
 	
 	private Call call;
 	
+	private int numValidCalls;
+	
+	private int numInvalidCalls;
+	
 	public Dispatcher() {
 		calls = new ArrayList<Call>();
+		this.numInvalidCalls = 0;
+		this.numValidCalls = 0;
 	}
 	
 	public void createCall(CountDownLatch cdl) throws InterruptedException {
@@ -37,8 +43,9 @@ public class Dispatcher {
 			TCall newCall = new TCall(call, numero, cdl);
 			Thread llamada = new Thread(newCall);			
 			llamada.start();
-		} else {
-			
+			numValidCalls++;
+		} else {			
+			numInvalidCalls++;
 		}
 	}
 	public boolean attendCall() {
@@ -85,7 +92,13 @@ public class Dispatcher {
 		List<Employee> director = employeeDaoRepository.findByPosition("director");
 		return (operador.size() != 0) ? operador.get(0) : (supervisor.size() != 0) ? supervisor.get(0) : (director.size() != 0) ? director.get(0) : null;
 	}
-	
-	
+
+	public int getNumValidCalls() {
+		return numValidCalls;
+	}
+
+	public int getNumInvalidCalls() {
+		return numInvalidCalls;
+	}
 	
 }
