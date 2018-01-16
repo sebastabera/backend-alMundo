@@ -1,5 +1,7 @@
 package com.sebastabera.springboot.app;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Test;
@@ -84,6 +86,8 @@ public class CallTest {
 			// CountDownLatch cdl = new CountDownLatch(1);
 
 			cdl.await();
+			
+			assertEquals(1, 1, 20);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
