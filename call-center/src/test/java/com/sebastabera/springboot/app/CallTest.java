@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.sebastabera.springboot.app.dao.ICallDaoRepository;
 import com.sebastabera.springboot.app.dao.IEmployeeDaoRepository;
 import com.sebastabera.springboot.app.dao.IPositionDaoRepository;
 import com.sebastabera.springboot.app.models.entity.Employee;
@@ -29,6 +30,9 @@ public class CallTest {
 
 	@Autowired
 	private IPositionDaoRepository positionRepository;
+	
+	@Autowired
+	private ICallDaoRepository callRepository;
 
 	@Autowired
 	private Dispatcher dispatcher;
@@ -51,6 +55,7 @@ public class CallTest {
 		Employee supervisor2 = new Employee("daniela", "4", supervisor);
 		Employee supervisor3 = new Employee("leandro", "5", supervisor);
 		Employee director1 = new Employee("luis", "6", director);
+		
 		employeeRepository.save(operador1);
 		employeeRepository.save(operador2);
 		employeeRepository.save(supervisor1);
@@ -59,6 +64,8 @@ public class CallTest {
 		employeeRepository.save(director1);
 		try {
 			CountDownLatch cdl = new CountDownLatch(6);
+			dispatcher.createCall(cdl);
+			dispatcher.createCall(cdl);
 			dispatcher.createCall(cdl);
 			dispatcher.createCall(cdl);
 			dispatcher.createCall(cdl);
@@ -81,6 +88,10 @@ public class CallTest {
 	
 	@Test
 	public void callMax() {
+		callRepository.deleteAll();		
+		dispatcher.setNumInvalidCalls();
+		dispatcher.setNumValidCalls();
+		System.out.println("------------------- " +dispatcher.getNumValidCalls());
 		Position operador = new Position();
 		operador.setName("operador");
 		Position supervisor = new Position();
@@ -99,7 +110,7 @@ public class CallTest {
 		Employee director1 = new Employee("luis", "6", director);
 		Employee operador3 = new Employee("carlos", "7", operador);
 		Employee operador4 = new Employee("alejandro", "8", operador);
-		Employee supervisor4 = new Employee("andrea", "9", supervisor);
+		Employee supervisor4 = new Employee("roman", "9", supervisor);
 		Employee director2 = new Employee("daniela", "10", supervisor);
 		employeeRepository.save(operador1);
 		employeeRepository.save(operador2);
@@ -114,16 +125,27 @@ public class CallTest {
 		try {
 			CountDownLatch cdl = new CountDownLatch(10);
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 			dispatcher.createCall(cdl);
+			System.out.println("------------------- " +dispatcher.getNumValidCalls());
 
 			cdl.await();
 			

@@ -23,8 +23,6 @@ public class Dispatcher {
 	@Autowired 
 	private ICallDaoRepository callDaoRepository;
 	
-	private List<Call> calls;
-	
 	private Call call;
 	
 	private int numValidCalls;
@@ -32,7 +30,6 @@ public class Dispatcher {
 	private int numInvalidCalls;
 	
 	public Dispatcher() {
-		calls = new ArrayList<Call>();
 		this.numInvalidCalls = 0;
 		this.numValidCalls = 0;
 	}
@@ -68,7 +65,7 @@ public class Dispatcher {
 				return false;
 			}
 		} else {
-			System.out.println("Hay mas de 10 llamadas en curso");
+			System.out.println("Hay 10 llamadas en curso, no se puede atender la nueva llamada");
 			return false;
 		}
 	}
@@ -92,16 +89,7 @@ public class Dispatcher {
 	 */
 	public boolean verifyMaxNumberCalls() {
 		List<Call> calls = (List<Call>) callDaoRepository.findAll();
-		return (calls != null && calls.size() <=10) ? true : false;
-	}
-	
-	/*
-	 * metodo que permite cambiar el estado de una llamada
-	 */
-	public void stopCall(Long id) {
-		Call callAux = callDaoRepository.findOne(id);
-		callAux.setState(false);
-		callDaoRepository.save(callAux);
+		return (calls != null && calls.size() <10) ? true : false;
 	}
 	
 	/*
@@ -118,8 +106,16 @@ public class Dispatcher {
 		return numValidCalls;
 	}
 
+	public void setNumValidCalls() {
+		this.numValidCalls = 0;
+	}
+	
 	public int getNumInvalidCalls() {
 		return numInvalidCalls;
+	}
+	
+	public void setNumInvalidCalls() {
+		this.numInvalidCalls = 0;
 	}
 	
 }
