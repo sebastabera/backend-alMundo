@@ -1,39 +1,22 @@
 package com.sebastabera.springboot.app;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sebastabera.springboot.app.dao.IEmployeeDaoRepository;
 import com.sebastabera.springboot.app.dao.IPositionDaoRepository;
 import com.sebastabera.springboot.app.models.entity.Employee;
 import com.sebastabera.springboot.app.models.entity.Position;
 import com.sebastabera.springboot.app.services.Dispatcher;
-import com.sebastabera.springboot.app.services.EmployeeService;
-import com.sebastabera.springboot.app.services.PositionService;
-
-/*@RunWith(SpringRunner.class)
-@SpringBootTest
-@DataJpaTest*/
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = CallCenterApplication.class)
@@ -84,7 +67,6 @@ public class CallTest {
 			dispatcher.createCall(cdl);
 			dispatcher.createCall(cdl);
 			dispatcher.createCall(cdl);
-			// CountDownLatch cdl = new CountDownLatch(1);
 
 			cdl.await();
 			

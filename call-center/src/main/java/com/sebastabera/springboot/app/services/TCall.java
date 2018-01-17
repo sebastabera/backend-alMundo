@@ -35,7 +35,7 @@ public class TCall implements Runnable{
 			}
 			
 		}
-		System.out.println("llamada " + call.getId() + " atendida por: " + call.getEmployee().getName() + " fue terminada");
+		System.out.println("llamada " + call.getId() + " atendida por: " + call.getEmployee().getName() + " fue terminada");		
 		cdl.countDown();
 		
 	}

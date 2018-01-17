@@ -37,9 +37,14 @@ public class Dispatcher {
 		this.numValidCalls = 0;
 	}
 	
+	/*
+	 * Metodo que permite crear un nuevo hilo de llamada al call center
+	 */
 	public void createCall(CountDownLatch cdl) throws InterruptedException {
 		if(attendCall()) {
 			int numero = (int) (Math.random() * 5) + 5;
+			call.setTime(numero);
+			callDaoRepository.save(call);
 			TCall newCall = new TCall(call, numero, cdl);
 			Thread llamada = new Thread(newCall);			
 			llamada.start();
@@ -48,6 +53,11 @@ public class Dispatcher {
 			numInvalidCalls++;
 		}
 	}
+	
+	/*
+	 * metodo que permite verificar si se cumplen diferentes condiciones para recibir llamadas
+	 * validaciones como el numero maximo de llamadas o si hay usuarios disponibles para atender las llamadas
+	 */
 	public boolean attendCall() {
 		if(verifyMaxNumberCalls()) {
 			if(dispatcherCall()) {
@@ -63,6 +73,9 @@ public class Dispatcher {
 		}
 	}
 	
+	/*
+	 * metodo que permite instanciar una llamada si encuentra empleados disponibles
+	 */
 	public boolean dispatcherCall() {
 		Employee employeeCall = employeeToCall();
 		if(employeeCall != null) {
@@ -74,18 +87,26 @@ public class Dispatcher {
 		}
 	}
 	
-	
+	/*
+	 * metodo para verificar si se ha llegado al numero maximo de llamadas que se pueden atender
+	 */
 	public boolean verifyMaxNumberCalls() {
 		List<Call> calls = (List<Call>) callDaoRepository.findAll();
 		return (calls != null && calls.size() <=10) ? true : false;
 	}
 	
+	/*
+	 * metodo que permite cambiar el estado de una llamada
+	 */
 	public void stopCall(Long id) {
 		Call callAux = callDaoRepository.findOne(id);
 		callAux.setState(false);
 		callDaoRepository.save(callAux);
 	}
 	
+	/*
+	 * metodo que permite encontrar un empleado para atender una llamada
+	 */
 	public Employee employeeToCall() {		
 		List<Employee> operador = employeeDaoRepository.findByPosition("operador");
 		List<Employee> supervisor = employeeDaoRepository.findByPosition("supervisor");

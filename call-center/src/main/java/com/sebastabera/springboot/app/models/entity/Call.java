@@ -27,6 +27,8 @@ public class Call implements Serializable{
 	
 	private boolean state;
 	
+	private int time;
+
 	public Call(Employee employee, boolean state) {
 		this.employee = employee;
 		this.state = state;
@@ -60,5 +62,12 @@ public class Call implements Serializable{
 		this.state = state;
 	}
 
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
+	}
 	
 }
